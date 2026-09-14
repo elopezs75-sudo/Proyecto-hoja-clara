@@ -1,0 +1,20 @@
+body {
+  font-family: Arial, sans-serif;
+  padding: 20px;
+}
+ 
+table#Hojacalculo {
+  border-collapse: collapse; 
+}
+ 
+table#Hojacalculo td, table#Hojacalculo th {
+  border: 1px solid #999;
+  width: 70px;
+  height: 25px;
+  text-align: center;
+}
+ 
+
+table#Hojacalculo th {
+  background-color: #d9d9d9;
+}
