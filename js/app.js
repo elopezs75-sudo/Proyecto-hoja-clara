@@ -90,6 +90,7 @@ function guardarValor() {
   actualizarDependencias(idCelda, nuevoValor); // NIVEL 4
   recalcularCelda(idCelda);                    // muestra el resultado DE MANEJO DE ERRORES
   propagarCambios(idCelda);                    // NIVEL 4: recalcula en cadena
+    guardarEnLocalStorage(); // NIVEL 7:guardado auto
 }
 
 input.addEventListener("keydown", function (evento) {
@@ -101,5 +102,8 @@ guardarValor();
 input.addEventListener("blur", guardarValor);
 }
 
-document.addEventListener("DOMContentLoaded", cuadricula); 
+document.addEventListener("DOMContentLoaded", function () {
+  cuadricula();
+  cargarDesdeLocalStorage();
+});
 
