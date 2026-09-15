@@ -55,24 +55,22 @@ function recalcularCelda(idCelda) {
   const td = document.getElementById("celda-" + idCelda);
   if (!td) return;
 
+  let valorMostrar;
+
   if (contenido && contenido.trim().startsWith("=")) {
     try {
       const resultado = calcularFormula(contenido.trim());
-      if (resultado === undefined || Number.isNaN(resultado)) {
-        td.textContent = "#ERROR!";
-      } else {
-        td.textContent = resultado;
-      }
+      valorMostrar = (resultado === undefined || Number.isNaN(resultado)) ? "#ERROR!" : resultado;
     } catch (error) {
-      if (error.message === "#DIV/0!") {
-        td.textContent = "#DIV/0!";
-      } else {
-        td.textContent = "#ERROR!";
-      }
+      valorMostrar = (error.message === "#DIV/0!") ? "#DIV/0!" : "#ERROR!";
     }
+  } else if (contenido !== undefined && contenido.trim() !== "" && !Number.isNaN(parseFloat(contenido))) {
+    valorMostrar = parseFloat(contenido);
   } else {
-    td.textContent = contenido || "";
+    valorMostrar = contenido || "";
   }
+
+  mostrarEnCelda(td, idCelda, valorMostrar);
 }
 
 function propagarCambios(idCelda, visitadas) {
