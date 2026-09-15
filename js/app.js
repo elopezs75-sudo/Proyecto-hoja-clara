@@ -37,58 +37,70 @@ function cuadricula() {
     const tr = document.createElement("tr");
 
 
-    const thFila = document.createElement("th");
-    thFila.textContent = fila;
-    tr.appendChild(thFila);
+const thFila = document.createElement("th");
+thFila.textContent = fila;
+tr.appendChild(thFila);
 
-    for (let col = 0; col < numero_columnas; col++) {
-      const td = document.createElement("td");
+for (let col = 0; col < numero_columnas; col++) {
+const td = document.createElement("td");
 
-      const idCelda = numerocolumna(col) + fila;
-      td.id = "celda-" + idCelda;
-      td.dataset.celda = idCelda;
+const idCelda = numerocolumna(col) + fila;
+td.id = "celda-" + idCelda;
+td.dataset.celda = idCelda;
 
 
-      //nivel 2 ingresar datos a las celdas
-      td.addEventListener("dblclick", function () {
-        activarEdicion(td, idCelda);
-      });
-
-      tr.appendChild(td);
-    }
-
-    tabla.appendChild(tr);
-  }
-
-  contenedor.appendChild(tabla);
+//nivel 2 ingresar datos a las celdas
+td.addEventListener("dblclick", function () {
+activarEdicion(td, idCelda);
+});
+tr.appendChild(td);
 }
+
+tabla.appendChild(tr);
+}
+contenedor.appendChild(tabla);
+}
+
 document.addEventListener("DOMContentLoaded", cuadricula);
 //NIVEL 2 ACTIVAR CELDAS
 function activarEdicion(td, idCelda) {
-  if (td.querySelector("input")) return;
+if (td.querySelector("input")) return;
 
-  const valorActual = datosHojas[idCelda] || "";
+const valorActual = datosHojas[idCelda] || "";
 
-  td.textContent = "";
-  const input = document.createElement("input");
-  input.type = "text";
-  input.value = valorActual;
-  td.appendChild(input);
-  input.focus();
 
-  //funcion pra gurdar valores en la celda al escribir
-  function guardarValor() {
-    const nuevoValor = input.value;
-    datosHojas[idCelda] = nuevoValor;
+td.textContent = "";
+const input = document.createElement("input");
+input.type = "text";
+input.value = valorActual;
+td.appendChild(input);
+input.focus();
+
+//funcion pra gurdar valores en la celda al escribir
+function guardarValor() {
+  const nuevoValor = input.value;
+  datosHojas[idCelda] = nuevoValor;
+
+  if (nuevoValor.trim().startsWith("=")) {
+    try {
+      const resultado = calcularFormula(nuevoValor.trim());
+      td.textContent = resultado;
+    } catch (error) {
+      td.textContent = "#ERROR!";
+    }
+  } else {
     td.textContent = nuevoValor;
   }
-
-  input.addEventListener("keydown", function (evento) {
-    if (evento.key === "Enter") {
-      guardarValor();
-    }
-  });
-
-  input.addEventListener("blur", guardarValor);
 }
+
+input.addEventListener("keydown", function (evento) {
+if (evento.key === "Enter") {
+guardarValor();
+}
+});
+
+input.addEventListener("blur", guardarValor);
+}
+
+document.addEventListener("DOMContentLoaded", cuadricula); 
 
