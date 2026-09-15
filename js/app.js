@@ -79,21 +79,17 @@ input.focus();
 //funcion pra gurdar valores en la celda al escribir
 function guardarValor() {
   const nuevoValor = input.value;
-  datosHojas[idCelda] = nuevoValor;
 
-  actualizarDependencias(idCelda, nuevoValor);//nivel 4 referencia de valor de celda
-
-  if (nuevoValor.trim().startsWith("=")) {
-    try {
-      const resultado = calcularFormula(nuevoValor.trim());
-      td.textContent = resultado;
-    } catch (error) {
-      td.textContent = "#ERROR!";
-    }
-  } else {
-    td.textContent = nuevoValor;
-      propagarCambios(idCelda);//nivel 4 cambios de celda
+  // NIVEL 6: revisar ciclos ANTES de guardar
+  if (nuevoValor.trim().startsWith("=") && formulaCreaCiclo(idCelda, nuevoValor.trim())) {
+    td.textContent = "#REF-CIRCULAR!";
+    return;
   }
+
+  datosHojas[idCelda] = nuevoValor;
+  actualizarDependencias(idCelda, nuevoValor); // NIVEL 4
+  recalcularCelda(idCelda);                    // muestra el resultado DE MANEJO DE ERRORES
+  propagarCambios(idCelda);                    // NIVEL 4: recalcula en cadena
 }
 
 input.addEventListener("keydown", function (evento) {
