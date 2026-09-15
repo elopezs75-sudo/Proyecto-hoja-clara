@@ -81,6 +81,8 @@ function guardarValor() {
   const nuevoValor = input.value;
   datosHojas[idCelda] = nuevoValor;
 
+  actualizarDependencias(idCelda, nuevoValor);//nivel 4 referencia de valor de celda
+
   if (nuevoValor.trim().startsWith("=")) {
     try {
       const resultado = calcularFormula(nuevoValor.trim());
@@ -90,6 +92,7 @@ function guardarValor() {
     }
   } else {
     td.textContent = nuevoValor;
+      propagarCambios(idCelda);//nivel 4 cambios de celda
   }
 }
 
