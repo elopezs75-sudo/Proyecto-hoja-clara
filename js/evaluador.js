@@ -118,7 +118,8 @@ return pilaValores[0];
 }
 
 function calcularFormula(contenidoCelda) {
-const formulaSinIgual = contenidoCelda.substring(1);
+  let formulaSinIgual = contenidoCelda.substring(1);//cambio por let 
+  formulaSinIgual = expandirFunciones(formulaSinIgual);//nivel 5 implementado
 const tokens = tokenizar(formulaSinIgual);
 return evaluarTokens(tokens);
 }

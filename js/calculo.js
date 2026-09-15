@@ -3,12 +3,36 @@
 
 const dependientes = {};
 
+//cambios de referennccia para la funcion : sumatoria
 function obtenerReferencias(formulaConIgual) {
-const formulaSinIgual = formulaConIgual.substring(1);
-const tokens = tokenizar(formulaSinIgual);
-return tokens.filter(function (token) {
-return /^[A-Z]/.test(token);
- });
+  const formulaSinIgual = formulaConIgual.substring(1);
+  const referencias = new Set();
+
+  const regexRango = /([A-Z]+[0-9]+):([A-Z]+[0-9]+)/g;
+  const formulaSinRangos = formulaSinIgual.replace(regexRango, function (coincidencia, celdaInicio, celdaFin) {
+    const partesInicio = celdaInicio.match(/^([A-Z]+)([0-9]+)$/);
+    const partesFin = celdaFin.match(/^([A-Z]+)([0-9]+)$/);
+    const colInicio = partesInicio[1];
+    const filaInicio = parseInt(partesInicio[2]);
+    const colFin = partesFin[1];
+    const filaFin = parseInt(partesFin[2]);
+
+    if (colInicio === colFin) {
+      for (let f = filaInicio; f <= filaFin; f++) referencias.add(colInicio + f);
+    } else if (filaInicio === filaFin) {
+      const nInicio = columnaANumero(colInicio);
+      const nFin = columnaANumero(colFin);
+      for (let c = nInicio; c <= nFin; c++) referencias.add(numerocolumna(c) + filaInicio);
+    }
+
+    return "";
+  });
+
+  const regexCelda = /[A-Z]+[0-9]+/g;
+  const sueltas = formulaSinRangos.match(regexCelda) || [];
+  sueltas.forEach(function (referencia) { referencias.add(referencia); });
+
+  return Array.from(referencias);
 }
 
 function actualizarDependencias(idCelda, nuevoValor) {
