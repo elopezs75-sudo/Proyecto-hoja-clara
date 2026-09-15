@@ -55,4 +55,4 @@ function cuadricula() {
   contenedor.appendChild(tabla);
 }
  
-document.addEventListener("DOMContentLoaded", cuadricula); // minúscula, igual que la función
+document.addEventListener("DOMContentLoaded", cuadricula); 
